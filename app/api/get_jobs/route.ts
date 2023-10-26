@@ -1,9 +1,10 @@
 import { Prisma } from "@prisma/client";
 import pw, { Browser } from "playwright";
+
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-const SBR_CDP = `wss://${process.env.BRIGHTDATA_AUTH}@brd.superproxy.io:9222`;
+const SBR_CDP = `wss://${process.env.BRIGHDATA_AUTH}@brd.superproxy.io:9222`;
 
 export const GET = async (req: Request, res: Response) => {
 	const browser = await pw.chromium.connectOverCDP(SBR_CDP);
@@ -107,16 +108,19 @@ const getRemoteOkJobs = async (instance: Browser) => {
 			} satisfies Prisma.JobsCreateManyInput;
 
 			const h2Title = row.querySelector("h2");
+
 			if (h2Title) {
-				obj.title = h2Title.textContent?.trim() || "";
+				obj.title = h2Title.textContent?.trim() ?? "";
 			}
 
 			const h3Company = row.querySelector("h3");
+
 			if (h3Company) {
-				obj.company = h3Company.textContent?.trim() || "";
+				obj.company = h3Company.textContent?.trim() ?? "";
 			}
 
 			const hasLogoElement = row.querySelector(".has-logo");
+
 			if (hasLogoElement) {
 				const img = hasLogoElement.querySelector("img");
 				obj.logo = img?.getAttribute("src") ?? "";
@@ -128,6 +132,7 @@ const getRemoteOkJobs = async (instance: Browser) => {
 			}
 
 			const locationsElements = row.querySelectorAll(".location");
+
 			for (const locationElement of locationsElements) {
 				const location = locationElement.textContent?.trim() ?? "";
 				if (location.startsWith("💰")) {
