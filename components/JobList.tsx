@@ -2,12 +2,7 @@
 
 import { ChangeEvent, useState, useEffect } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-	Card,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
+import {Card,CardDescription,CardHeader,CardTitle,} from "@/components/ui/card";
 import Link from "next/link";
 
 type Job = {
@@ -67,48 +62,50 @@ const JobList: React.FC<{ jobs: Job[] }> = ({ jobs }) => {
 	return (
 		<div
 			key={filter}
-			className="flex flex-col items-center justify-center w-[full] m-auto bg-[#16161A]"
+			className="flex flex-col items-center justify-center w-[full] m-auto bg-[#16161A] min-h-screen"
 		>
 			<div className="flex flex-col w-[50vw] p-[3vw]">
 				<h1 className="font-semibold text-[2.5vw] text-[#FFFFFE] mb-[5vh]">
-					5 jobs Available
+					{filteredJobs.length} jobs Available
 				</h1>
 
-				<div className="mb-4">
-					<label
-						htmlFor="salaryFilter"
-						className="block mb-2 text-white"
-					>
-						Filter by Salary:
-					</label>
-					<select
-						id="salaryFilter"
-						value={filter}
-						onChange={(e: ChangeEvent<HTMLSelectElement>) => {
-							const newFilter = e.target.value as
-								| "all"
-								| "highest"
-								| "lowest";
-							console.log("Filter changed to:", newFilter);
-							setFilter(newFilter);
-						}}
-						className="p-2"
-					>
-						<option value="all">All</option>
-						<option value="highest">Highest</option>
-						<option value="lowest">Lowest</option>
-					</select>
-				</div>
+				<div className="flex items-center justify-between">
+					<div className="mb-4">
+						<label
+							htmlFor="salaryFilter"
+							className="block mb-2 text-white"
+						>
+							Filter by Salary:
+						</label>
+						<select
+							id="salaryFilter"
+							value={filter}
+							onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+								const newFilter = e.target.value as
+									| "all"
+									| "highest"
+									| "lowest";
+								console.log("Filter changed to:", newFilter);
+								setFilter(newFilter);
+							}}
+							className="p-2"
+						>
+							<option value="all">All</option>
+							<option value="highest">Highest</option>
+							<option value="lowest">Lowest</option>
+						</select>
+					</div>
 
-				{/* Add the text input field for filtering */}
-				<input
-					type="text"
-					placeholder="Filter by keyword..."
-					value={filterText}
-					onChange={(e: ChangeEvent<HTMLInputElement>) => {
-						setFilterText(e.target.value);
-					}}
-				/>
+					{/* Add the text input field for filtering */}
+					<input
+						type="text"
+						placeholder="Filter by keyword..."
+						value={filterText}
+						onChange={(e: ChangeEvent<HTMLInputElement>) => {
+							setFilterText(e.target.value);
+						}}
+					/>
+				</div>
 
 				<ul className="flex items-center justify-center flex-col">
 					{filteredJobs.map((job) => (
