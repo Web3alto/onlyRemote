@@ -2,7 +2,12 @@
 
 import { ChangeEvent, useState, useEffect } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {Card,CardDescription,CardHeader,CardTitle,} from "@/components/ui/card";
+import {
+	Card,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
 import Link from "next/link";
 
 type Job = {
@@ -18,18 +23,32 @@ type Job = {
 const JobList: React.FC<{ jobs: Job[] }> = ({ jobs }) => {
 	const [filter, setFilter] = useState<"all" | "highest" | "lowest">("all");
 	const [sortedJobs, setSortedJobs] = useState<Job[]>(jobs);
-	const [filterText, setFilterText] = useState(""); // Add state for filter text
+	const [filterText, setFilterText] = useState("");
 
 	const extractSalaryValue = (salaryString: string | null): number => {
 		if (!salaryString) return 0;
 
-		const matches = salaryString.match(/\$[\d\.]+k\s*-\s*\$([\d\.]+)k/);
-
-		if (matches && matches[1]) {
-			const upperValue = parseFloat(matches[1]);
+		const rangeMatches = salaryString.match(
+			/\$[\d\.]+k\s*-\s*\$([\d\.]+)k/
+		);
+		if (rangeMatches && rangeMatches[1]) {
+			const upperValue = parseFloat(rangeMatches[1]);
 			return upperValue * 1000;
 		}
 
+		const singleValueMatches = salaryString.match(
+			/\$([\d\.]+)k|(\$[\d,]+)/
+		);
+		if (singleValueMatches) {
+			if (singleValueMatches[1]) {
+				return parseFloat(singleValueMatches[1]) * 1000;
+			} else if (singleValueMatches[2]) {
+				const valueWithoutComma = singleValueMatches[2]
+					.replace(/,/g, "")
+					.slice(1);
+				return parseFloat(valueWithoutComma);
+			}
+		}
 		return 0;
 	};
 
@@ -50,11 +69,9 @@ const JobList: React.FC<{ jobs: Job[] }> = ({ jobs }) => {
 			);
 		}
 
-		console.log("Sorted jobs:", newSortedJobs);
 		setSortedJobs(newSortedJobs);
 	}, [filter, jobs]);
 
-	// Filter the jobs based on the filterText
 	const filteredJobs = sortedJobs.filter((job) =>
 		job.title.toLowerCase().includes(filterText.toLowerCase())
 	);
@@ -96,7 +113,6 @@ const JobList: React.FC<{ jobs: Job[] }> = ({ jobs }) => {
 						</select>
 					</div>
 
-					{/* Add the text input field for filtering */}
 					<input
 						type="text"
 						placeholder="Filter by keyword..."

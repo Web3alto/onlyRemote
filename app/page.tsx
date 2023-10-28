@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
-import JobList from "../components/JobList"; // Import our new client component
+
+import JobList from "../components/JobList";
 
 type Job = {
 	id: string;
@@ -15,7 +16,6 @@ export default async function Home() {
 	const jobs: Job[] = await prisma.jobs.findMany({
 		where: {
 			date: {
-				// today minus 1 day
 				gte: new Date(new Date().setDate(new Date().getDate() - 1)),
 			},
 			NOT: {

@@ -2,17 +2,18 @@ import { Prisma } from "@prisma/client";
 import axios from "axios";
 import { parse } from "node-html-parser";
 import { NextResponse } from "next/server";
-// import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 
 export const GET = async (req: Request, res: Response) => {
 	const remoteOKJobs = await getRemoteOkJobs();
 	const workRemotelyJobs = await getWorkRemotelyJobs();
+	const glassdoorJobs = await getGlassdoorJobs();
 
-	const jobs = [...workRemotelyJobs, ...remoteOKJobs];
+	const jobs = [...workRemotelyJobs, ...remoteOKJobs, ...glassdoorJobs];
 
-	// await prisma.jobs.createMany({
-	// 	data: jobs,
-	// });
+	await prisma.jobs.createMany({
+		data: jobs,
+	});
 
 	return NextResponse.json({
 		jobs,
@@ -95,6 +96,77 @@ const getWorkRemotelyJobs = async () => {
 		if (!job?.title) return false;
 		if (!job?.url) return false;
 		if (!job?.company) return false;
+		return true;
+	}) as Prisma.JobsCreateManyInput[];
+
+	return jobsFiltered;
+};
+
+const getGlassdoorJobs = async () => {
+	const baseUrl = "https://remote.co/remote-jobs/developer/";
+	const response = await axios.get(baseUrl);
+	const root = parse(response.data);
+
+	const jobDivs = root.querySelectorAll(
+		".card.m-0.border-left-0.border-right-0.border-top-0.border-bottom"
+	);
+
+	const extractSalary = async (url: string): Promise<string> => {
+		try {
+			const salaryResponse = await axios.get(url);
+			const salaryRoot = parse(salaryResponse.data);
+			const salaryDiv = salaryRoot.querySelector(
+				".job_info_container_sm .salary_sm.row .col-10.col-sm-11.pl-1"
+			);
+			const salaryMatches = salaryDiv?.text.match(/\$([\d,]+)/);
+
+			return salaryMatches ? salaryMatches[0] : "";
+		} catch (error) {
+			console.error(
+				`Error while fetching salary data from ${url}:`,
+				error
+			);
+			return "";
+		}
+	};
+
+	const jobs = await Promise.all(
+		jobDivs.map(async (jobDiv) => {
+			const obj = {
+				title: "",
+				company: "",
+				date: new Date(),
+				logo: "",
+				salary: "",
+				url: "",
+			} as Prisma.JobsCreateManyInput;
+
+			obj.title =
+				jobDiv.querySelector("span.font-weight-bold.larger")?.text ??
+				"";
+			const companyText =
+				jobDiv.querySelector("p.m-0.text-secondary")?.text ?? "";
+			obj.company = companyText.split("|")[0].trim();
+			obj.logo =
+				jobDiv
+					.querySelector("img.card-img")
+					?.getAttribute("data-lazy-src") ?? "";
+			const href = jobDiv?.rawAttributes.href || "";
+			const defUrl = "https://remote.co/";
+			obj.url = defUrl + href;
+			const extractedSalary = await extractSalary(obj.url);
+			if (extractedSalary) {
+				obj.salary = "💰 " + extractedSalary;
+			}
+
+			return obj;
+		})
+	);
+
+	const jobsFiltered = jobs.filter((job) => {
+		if (!job.title) return false;
+		if (!job.url) return false;
+		if (!job.company) return false;
 		return true;
 	}) as Prisma.JobsCreateManyInput[];
 
