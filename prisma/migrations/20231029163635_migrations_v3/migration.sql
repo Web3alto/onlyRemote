@@ -10,3 +10,6 @@ CREATE TABLE "Jobs" (
 
     CONSTRAINT "Jobs_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Jobs_url_key" ON "Jobs"("url");

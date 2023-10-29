@@ -79,41 +79,33 @@ const JobList: React.FC<{ jobs: Job[] }> = ({ jobs }) => {
 	return (
 		<div
 			key={filter}
-			className="flex flex-col items-center justify-center w-[full] m-auto bg-[#16161A] min-h-screen"
+			className="flex flex-col items-center justify-start w-[full] m-auto bg-[#16161A] min-h-screen"
 		>
-			<div className="flex flex-col w-[50vw] p-[3vw]">
-				<h1 className="font-semibold text-[2.5vw] text-[#FFFFFE] mb-[5vh]">
+			<div className="flex flex-col w-[90vw] lg:w-[50vw] p-[3vw]">
+				<h1 className="font-semibold text-[7.5vw] sm:text-[5vw] lg:text-[2.5vw] text-[#FFFFFE] my-[5vh]">
 					{filteredJobs.length} jobs Available
 				</h1>
-
-				<div className="flex items-center justify-between">
-					<div className="mb-4">
-						<label
-							htmlFor="salaryFilter"
-							className="block mb-2 text-white"
-						>
-							Filter by Salary:
-						</label>
-						<select
-							id="salaryFilter"
-							value={filter}
-							onChange={(e: ChangeEvent<HTMLSelectElement>) => {
-								const newFilter = e.target.value as
-									| "all"
-									| "highest"
-									| "lowest";
-								console.log("Filter changed to:", newFilter);
-								setFilter(newFilter);
-							}}
-							className="p-2"
-						>
-							<option value="all">All</option>
-							<option value="highest">Highest</option>
-							<option value="lowest">Lowest</option>
-						</select>
-					</div>
+				<div className="flex flex-col sm:flex-row items-start sm:items-end justify-between">
+					<select
+						id="salaryFilter"
+						value={filter}
+						onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+							const newFilter = e.target.value as
+								| "all"
+								| "highest"
+								| "lowest";
+							console.log("Filter changed to:", newFilter);
+							setFilter(newFilter);
+						}}
+						className="px-[2vw] py-[.75vw] border-none bg-[#30353D] rounded-[.5vw] text-[#94A1B2] text-[3.75vw] sm:text-[2vw] lg:text-[.9vw] mb-[3vw] sm:mb-0"
+					>
+						<option value="all">All Salaries</option>
+						<option value="highest">Highest Salary</option>
+						<option value="lowest">Lowest Salary</option>
+					</select>
 
 					<input
+						className="text-[3.75vw] sm:text-[2vw] lg:text-[.9vw] border-none bg-[#30353D] rounded-[.5vw] px-[2vw] py-[.75vw] text-[#FFFFFE] ring-0"
 						type="text"
 						placeholder="Filter by keyword..."
 						value={filterText}
@@ -123,41 +115,48 @@ const JobList: React.FC<{ jobs: Job[] }> = ({ jobs }) => {
 					/>
 				</div>
 
-				<ul className="flex items-center justify-center flex-col">
-					{filteredJobs.map((job) => (
-						<li
-							className="w-full mb-[3vh] bg-[#30353D] rounded-[1.25vw] drop-shadow-[0_10px_8px_rgba(0,0,0,0.5)]"
-							key={job.id}
-						>
-							<Link href={job.url}>
-								<Card className="hover:bg-muted/50 border-none">
-									<CardHeader className="flex flex-row gap-4">
-										<div className="w-[3vw] flex items-center justify-center">
-											<Avatar className="h-[6vh] w-[3vw]">
-												<AvatarFallback className="bg-[#16161A] text-[#FFFFFE] text-[1.25vw]">
-													{job.company[0]}
-												</AvatarFallback>
-												{job.logo ? (
-													<AvatarImage
-														src={job.logo}
-														alt={job.company}
-													/>
-												) : null}
-											</Avatar>
-										</div>
-										<div className="flex flex-col gap-2">
-											<CardTitle className="text-[#FFFFFE]">
-												{job.title}
-											</CardTitle>
-											<CardDescription className="text-[#94A1B2]">
-												{job.company} - {job.salary}
-											</CardDescription>
-										</div>
-									</CardHeader>
-								</Card>
-							</Link>
-						</li>
-					))}
+				<ul className="flex items-center justify-center flex-col mt-[2.5vh] pt-[5vh] border-t-2 border-[#94A1B2]">
+					{filteredJobs.length === 0 ? (
+						<div className="text-[#FFFFFE] mb-[3vh]">
+							No results for "{filterText}"
+						</div>
+					) : (
+						filteredJobs.map((job) => (
+							<li
+								className="w-full mb-[3vh] bg-[#30353D] rounded-[1.25vw] drop-shadow-[0_10px_8px_rgba(0,0,0,0.5)] cursor-pointer hover:scale-[1.025] transition duration-500 ease"
+								key={job.id}
+							>
+								<Link href={job.url}>
+									<Card className="hover:bg-muted/50 border-none relative">
+										<CardHeader className="flex flex-row p-[3vw] lg:p-[1.5vw]">
+											<div className="w-[9vw] sm:w-[6vw] lg:w-[3vw] flex items-center justify-center mr-[2vw] lg:mr-[1vw]">
+												<Avatar className="h-[9vw] sm:h-[6vw] lg:h-[3vw] w-[9vw] sm:w-[6vw] lg:w-[3vw]">
+													<AvatarFallback className="bg-[#16161A] text-[#FFFFFE] text-[1.25vw]">
+														{job.company[0]}
+													</AvatarFallback>
+													{job.logo ? (
+														<AvatarImage
+															src={job.logo}
+															alt={job.company}
+															className="object-contain"
+														/>
+													) : null}
+												</Avatar>
+											</div>
+											<div className="flex flex-col items-start justify-center gap-[.8vw] sm:gap-[.4vw]">
+												<CardTitle className="text-[#FFFFFE] text-[5vw] sm:text-[2.5vw] lg:text-[1.2vw] leading-[3.5vh] sm:leading-[2.75vh]">
+													{job.title}
+												</CardTitle>
+												<CardDescription className="sm:relative text-[#94A1B2] text-[3.75vw] sm:text-[2vw] lg:text-[.9vw]">
+													{job.company} - {job.salary}
+												</CardDescription>
+											</div>
+										</CardHeader>
+									</Card>
+								</Link>
+							</li>
+						))
+					)}
 				</ul>
 			</div>
 		</div>
