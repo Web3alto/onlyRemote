@@ -118,7 +118,7 @@ const JobList: React.FC<{ jobs: Job[] }> = ({ jobs }) => {
 				<ul className="flex items-center justify-center flex-col mt-[2.5vh] pt-[5vh] border-t-2 border-[#94A1B2]">
 					{filteredJobs.length === 0 ? (
 						<div className="text-[#FFFFFE] mb-[3vh]">
-							No results for "{filterText}"
+							No results for &quot;{filterText}&quot;
 						</div>
 					) : (
 						filteredJobs.map((job) => (
