@@ -7,3 +7,12 @@
 	margin: 0;
 	box-sizing: border-box;
 }
+
+select {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	background: url("data:image/svg+xml;utf8,<svg fill='white' xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M7 10l5 5 5-5z'></path></svg>")
+		no-repeat;
+	background-position: 90% center;
+}

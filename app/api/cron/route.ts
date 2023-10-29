@@ -13,6 +13,7 @@ export const GET = async (req: Request, res: Response) => {
 
 	await prisma.jobs.createMany({
 		data: jobs,
+		skipDuplicates: true,
 	});
 
 	return NextResponse.json({

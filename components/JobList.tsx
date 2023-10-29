@@ -97,7 +97,7 @@ const JobList: React.FC<{ jobs: Job[] }> = ({ jobs }) => {
 							console.log("Filter changed to:", newFilter);
 							setFilter(newFilter);
 						}}
-						className="px-[2vw] py-[.75vw] border-none bg-[#30353D] rounded-[.5vw] text-[#94A1B2] text-[3.75vw] sm:text-[2vw] lg:text-[.9vw] mb-[3vw] sm:mb-0"
+						className=" pl-[1vw] w-[10vw] py-[.75vw] border-none bg-[#30353D] rounded-[.5vw] text-left text-[#94A1B2] text-[3.75vw] sm:text-[2vw] lg:text-[.9vw] mb-[3vw] sm:mb-0"
 					>
 						<option value="all">All Salaries</option>
 						<option value="highest">Highest Salary</option>
