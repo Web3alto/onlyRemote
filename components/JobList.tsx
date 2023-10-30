@@ -87,6 +87,7 @@ const JobList: React.FC<{ jobs: Job[] }> = ({ jobs }) => {
 				</h1>
 				<div className="flex flex-col sm:flex-row items-start sm:items-end justify-between">
 					<select
+						className="pl-[2vw] sm:pl-[1vw] w-[40vw] sm:w-[25vw] lg:w-[10vw] py-[1.5vw] sm:py-[.75vw] border-none bg-[#30353D] rounded-[.5vw] text-left text-[#94A1B2] text-[3.75vw] sm:text-[2vw] lg:text-[.9vw] mb-[3vw] sm:mb-0"
 						id="salaryFilter"
 						value={filter}
 						onChange={(e: ChangeEvent<HTMLSelectElement>) => {
@@ -97,7 +98,6 @@ const JobList: React.FC<{ jobs: Job[] }> = ({ jobs }) => {
 							console.log("Filter changed to:", newFilter);
 							setFilter(newFilter);
 						}}
-						className=" pl-[1vw] w-[10vw] py-[.75vw] border-none bg-[#30353D] rounded-[.5vw] text-left text-[#94A1B2] text-[3.75vw] sm:text-[2vw] lg:text-[.9vw] mb-[3vw] sm:mb-0"
 					>
 						<option value="all">All Salaries</option>
 						<option value="highest">Highest Salary</option>
@@ -105,7 +105,7 @@ const JobList: React.FC<{ jobs: Job[] }> = ({ jobs }) => {
 					</select>
 
 					<input
-						className="text-[3.75vw] sm:text-[2vw] lg:text-[.9vw] border-none bg-[#30353D] rounded-[.5vw] px-[2vw] py-[.75vw] text-[#FFFFFE] ring-0"
+						className="text-[3.75vw] sm:text-[2vw] lg:text-[.9vw] border-none bg-[#30353D] rounded-[.5vw] px-[2vw] py-[1.5vw] sm:py-[.75vw] text-[#FFFFFE] ring-0"
 						type="text"
 						placeholder="Filter by keyword..."
 						value={filterText}
@@ -128,7 +128,7 @@ const JobList: React.FC<{ jobs: Job[] }> = ({ jobs }) => {
 							>
 								<Link href={job.url}>
 									<Card className="hover:bg-muted/50 border-none relative">
-										<CardHeader className="flex flex-row p-[3vw] lg:p-[1.5vw]">
+										<CardHeader className="flex flex-row p-[4vw] sm:p-[3vw] lg:p-[1.5vw]">
 											<div className="w-[9vw] sm:w-[6vw] lg:w-[3vw] flex items-center justify-center mr-[2vw] lg:mr-[1vw]">
 												<Avatar className="h-[9vw] sm:h-[6vw] lg:h-[3vw] w-[9vw] sm:w-[6vw] lg:w-[3vw]">
 													<AvatarFallback className="bg-[#16161A] text-[#FFFFFE] text-[1.25vw]">
@@ -144,7 +144,7 @@ const JobList: React.FC<{ jobs: Job[] }> = ({ jobs }) => {
 												</Avatar>
 											</div>
 											<div className="flex flex-col items-start justify-center gap-[.8vw] sm:gap-[.4vw]">
-												<CardTitle className="text-[#FFFFFE] text-[5vw] sm:text-[2.5vw] lg:text-[1.2vw] leading-[3.5vh] sm:leading-[2.75vh]">
+												<CardTitle className="text-[#FFFFFE] text-[5vw] sm:text-[2.5vw] lg:text-[1.2vw] leading-[6.5vw] sm:leading-[2.75vw] lg:leading-[1.75vw]">
 													{job.title}
 												</CardTitle>
 												<CardDescription className="sm:relative text-[#94A1B2] text-[3.75vw] sm:text-[2vw] lg:text-[.9vw]">
